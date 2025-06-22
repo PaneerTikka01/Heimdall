@@ -149,10 +149,12 @@ Orderbook Statistics:
    ```bash
    git clone https://github.com/PaneerTikka01/Heimdall.git
    cd Heimdall
-2. **Download the ITCH 5.0 dataset from NASDAQ if you want a different dataset.**
-3. Place the file in the root of the project directory.
-4. Build the project and run the engine
-5.  ```bash
+2. **Download the ITCH 5.0 dataset from the NASDAQ site:https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/**
+3. **I tested this project using the dataset ```12302019.NASDAQ_ITCH50``` which can be downloaded from: https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/12302019.NASDAQ_ITCH50.gz**
+4. This is a 3.5gb compressed file and after decompression it expands to around 10gb so be cautious about your disk space.
+5. Place the file in the root of the project directory.
+6. Build the project and run the engine
+7.  ```bash
      cargo build --release
     ./target/release/Heimdall
 

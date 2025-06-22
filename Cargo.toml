@@ -1,0 +1,9 @@
+[package]
+name = "Heimdall"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+itchy = "0.3"             # the ITCH parser
+anyhow = "1.0"            # for easy error handling

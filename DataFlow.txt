@@ -1,0 +1,65 @@
+Data Flow & Matching Details:
+
+
+Parsing:
+
+Each ITCH message → itchy::Message → match msg.body → OrderEvent.
+
+Symbols extracted from a.stock.to_string(), ID from a.reference, side from a.side, price & size from a.price.raw(), a.shares.
+
+
+
+Event Handling:
+
+In main loop: engine.handle(ev).
+
+New: route to books[symbol], book.match_limit(...), record in id_map.
+
+Cancel: use id_map to find symbol, call book.handle_cancel, remove ID if fully removed.
+
+Replace: lookup old in id_map, cancel old, insert new via match_limit, update id_map.
+
+
+
+Matching (price-time priority):
+
+Price priority: buys match lowest asks ≤ buy limit; sells match highest bids ≥ sell limit.
+
+Time priority: within a price level, orders in VecDeque in arrival order (push_back), matched via front().
+
+Partial fills: reduce sizes appropriately; remove filled orders.
+
+Leftovers: insert into own side if unmatched.
+
+Cancel: remove or reduce resting orders via index lookup and scanning the queue.
+
+
+
+
+Data Structures:
+
+BTreeMap<u32, VecDeque<Order>> for sorted price levels.
+
+VecDeque<Order> for FIFO per price.
+
+HashMap<u64, (Side, u32)> index for ID→(side, price).
+
+HashMap<String, OrderBook> books for per-symbol books.
+
+HashMap<u64, (String, Side)> id_map for routing events without symbol.
+
+
+
+
+FIFO without timestamp:
+
+Events arrive in chronological order; VecDeque.push_back ensures FIFO. No explicit timestamp needed for matching.
+
+If you want analytics/logging, you may optionally include and record timestamps, but matching logic works purely by order of arrival.
+
+
+
+run using the command:
+
+cargo build --release
+./target/release/Heimdall
